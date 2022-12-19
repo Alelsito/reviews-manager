@@ -6,7 +6,7 @@ const logger = require('morgan')
 require('dotenv').config()
 const mongoose = require('mongoose')
 
-const indexRouter = require('./src/routes')
+const { health, product } = require('./src/routes')
 
 const app = express()
 
@@ -21,7 +21,8 @@ mongoose
   .then(() => console.log('Database connected 🤙'))
   .catch((err) => console.log(err))
 
-app.use('/', indexRouter)
+app.use('/', health)
+app.use('/api/v1/product', product)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

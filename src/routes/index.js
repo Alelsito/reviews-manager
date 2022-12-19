@@ -1,9 +1,7 @@
-const express = require('express')
-const router = express.Router()
+const health = require('./health')
+const product = require('./product')
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.status(200).send({ title: 'Express' })
-})
-
-module.exports = router
+module.exports = {
+  health,
+  product
+}
