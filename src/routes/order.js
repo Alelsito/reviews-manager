@@ -19,4 +19,40 @@ router.post('/', validationPostOrder, (req, res) => {
   })
 })
 
+// Get (find all)
+router.get('/find/all', (req, res) => {
+  Order.find({}, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by id)
+router.get('/find/:id', (req, res) => {
+  Order.findById({ _id: req.params.id }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by product_id & user_id)
+router.get('/find', (req, res) => {
+  Order.find({
+    product_id: req.query.product_id,
+    user_id: req.query.user_id
+  }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
 module.exports = router
