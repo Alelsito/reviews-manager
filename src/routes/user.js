@@ -23,4 +23,37 @@ router.post('/', validationPostUser, (req, res) => {
   })
 })
 
+// Get (find all)
+router.get('/find/all', (req, res) => {
+  User.find({}, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by id)
+router.get('/find/:id', (req, res) => {
+  User.findById({ _id: req.params.id }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by email)
+router.get('/find', (req, res) => {
+  User.find({ email: req.query.email }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
 module.exports = router
