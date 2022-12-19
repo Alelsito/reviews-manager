@@ -1,11 +1,10 @@
 const express = require('express')
-
 const router = express.Router()
-
 const { User } = require('../model')
+const { validationPostUser } = require('../middleware/user')
 
 // Post
-router.post('/', (req, res) => {
+router.post('/', validationPostUser, (req, res) => {
   const user = new User()
   user.role = req.body.role
   user.first_name = req.body.first_name
