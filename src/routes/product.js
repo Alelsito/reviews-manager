@@ -1,11 +1,10 @@
 const express = require('express')
-
 const router = express.Router()
-
 const { Product } = require('../model')
+const { validationPostProduct } = require('../middleware/product')
 
 // Post
-router.post('/', (req, res) => {
+router.post('/', validationPostProduct, (req, res) => {
   const product = new Product()
   product.name = req.body.name
   product.description = req.body.description
