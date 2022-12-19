@@ -4,6 +4,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 require('dotenv').config()
+const mongoose = require('mongoose')
 
 const indexRouter = require('./src/routes')
 
@@ -14,6 +15,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+
+mongoose
+  .connect(process.env.URI)
+  .then(() => console.log('Database connected 🤙'))
+  .catch((err) => console.log(err))
 
 app.use('/', indexRouter)
 
