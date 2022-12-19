@@ -6,7 +6,7 @@ const logger = require('morgan')
 require('dotenv').config()
 const mongoose = require('mongoose')
 
-const { health, product } = require('./src/routes')
+const { health, product, order } = require('./src/routes')
 
 const app = express()
 
@@ -23,6 +23,7 @@ mongoose
 
 app.use('/', health)
 app.use('/api/v1/product', product)
+app.use('/api/v1/order', order)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
