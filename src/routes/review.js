@@ -21,4 +21,37 @@ router.post('/', validationPostReview, (req, res) => {
   })
 })
 
+// Get (find all)
+router.get('/find/all', (req, res) => {
+  Review.find({}, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by id)
+router.get('/find/:id', (req, res) => {
+  Review.findById({ _id: req.params.id }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
+// Get (find by title)
+router.get('/find', (req, res) => {
+  Review.find({ title: req.query.title }, (err, docs) => {
+    if (err) {
+      throw err
+    } else {
+      res.status(200).send({ data: docs })
+    }
+  })
+})
+
 module.exports = router
