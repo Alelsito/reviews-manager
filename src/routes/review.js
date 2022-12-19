@@ -1,11 +1,10 @@
 const express = require('express')
-
 const router = express.Router()
-
 const { Review } = require('../model')
+const { validationPostReview } = require('../middleware/review')
 
 // Post
-router.post('/', (req, res) => {
+router.post('/', validationPostReview, (req, res) => {
   const review = new Review()
   review.title = req.body.title
   review.description = req.body.description
