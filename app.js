@@ -3,10 +3,11 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
-require('dotenv').config()
 const mongoose = require('mongoose')
 
-const { health, product, order, review, user } = require('./src/routes')
+require('dotenv').config()
+
+const { health, product, order, review, user, auth } = require('./src/routes')
 
 const app = express()
 
@@ -21,11 +22,14 @@ mongoose
   .then(() => console.log('Database connected 🤙'))
   .catch((err) => console.log(err))
 
+require('./src/auth/auth')
+
 app.use('/', health)
 app.use('/api/v1/product', product)
 app.use('/api/v1/order', order)
 app.use('/api/v1/review', review)
 app.use('/api/v1/user', user)
+app.use('/api/v1', auth)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -40,7 +44,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.send('error')
 })
 
 module.exports = app
