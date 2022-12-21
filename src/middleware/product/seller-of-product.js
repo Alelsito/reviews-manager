@@ -6,7 +6,7 @@ const validationSellerOfSelectedProduct = (req, res, next) => {
 
   Product.findById({ _id: req.params.id }, (err, docs) => {
     if (err) {
-      throw err
+      res.status(404).send({ message: err })
     } else {
       if (docs.creator_user_id === userInfo._id || userInfo.role === 'ADMIN') {
         next()

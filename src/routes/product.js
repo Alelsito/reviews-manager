@@ -8,7 +8,6 @@ const { validationAdminSeller } = require('../middleware/auth/role-admin-seller'
 const { validationSellerOfSelectedProduct } = require('../middleware/product')
 
 // Post
-// Authorized role accounts: ADMIN, SELLER
 router.post('/',
   passport.authenticate('jwt', { session: false }),
   validationPostProduct, validationAdminSeller, (req, res) => {
@@ -22,9 +21,9 @@ router.post('/',
     product.images = req.body.images
     product.creator_user_id = res.locals.info._id
 
-    product.save((error, productStored) => {
-      if (error) {
-        res.status(500).send({ message: error })
+    product.save((err, productStored) => {
+      if (err) {
+        res.status(500).send({ message: err })
       } else {
         res.status(201).send(productStored)
       }
@@ -35,7 +34,7 @@ router.post('/',
 router.get('/find/all', (req, res) => {
   Product.find({}, (err, docs) => {
     if (err) {
-      throw err
+      res.status(404).send({ message: err })
     } else {
       res.status(200).send({ data: docs })
     }
@@ -46,7 +45,7 @@ router.get('/find/all', (req, res) => {
 router.get('/find/:id', (req, res) => {
   Product.findById({ _id: req.params.id }, (err, docs) => {
     if (err) {
-      throw err
+      res.status(404).send({ message: err })
     } else {
       res.status(200).send({ data: docs })
     }
@@ -57,7 +56,7 @@ router.get('/find/:id', (req, res) => {
 router.get('/find', (req, res) => {
   Product.find({ name: req.query.name }, (err, docs) => {
     if (err) {
-      throw err
+      res.status(404).send({ message: err })
     } else {
       res.status(200).send({ data: docs })
     }
@@ -76,7 +75,7 @@ router.patch('/update/:id',
       { [key]: req.body.value }, // Nuevo valor
       (err, docs) => {
         if (err) {
-          throw err
+          res.status(409).send({ message: err })
         } else {
           res.status(200).send({ data: docs })
         }
@@ -90,7 +89,7 @@ router.delete('/:id',
   (req, res) => {
     Product.deleteOne({ _id: req.params.id }, (err, docs) => {
       if (err) {
-        throw err
+        res.status(404).send({ message: err })
       } else {
         res.status(200).send({ data: docs })
       }

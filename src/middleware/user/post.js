@@ -50,7 +50,7 @@ const validationPostUser = (req, res, next) => {
       if (isValid) {
         next()
       } else {
-        res.send({
+        res.status(422).send({
           error: {
             type: message.name,
             message: message.errors[0]

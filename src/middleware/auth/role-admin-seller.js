@@ -7,7 +7,7 @@ const validationAdminSeller = (req, res, next) => {
 
   User.findById({ _id: userInfo.user._id }, (err, docs) => {
     if (err) {
-      throw err
+      res.status(404).send({ message: err })
     } else {
       if (docs.role !== 'CUSTOMER') {
         res.locals.info = docs
