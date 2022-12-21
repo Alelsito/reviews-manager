@@ -1,27 +1,33 @@
+/* eslint-disable camelcase */
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
 const { Product } = require('../model')
 const { validationPostProduct } = require('../middleware/product')
+const { validationAdminSeller } = require('../middleware/auth/role-admin-seller')
 
 // Post
-router.post('/', validationPostProduct, (req, res) => {
-  const product = new Product()
-  product.name = req.body.name
-  product.description = req.body.description
-  product.price = req.body.price
-  product.in_offer = req.body.in_offer
-  product.offer_percentage = req.body.offer_percentage
-  product.category = req.body.category
-  product.images = req.body.images
+// Authorized role accounts: ADMIN, SELLER
+router.post('/',
+  passport.authenticate('jwt', { session: false }),
+  validationPostProduct, validationAdminSeller, (req, res) => {
+    const product = new Product()
+    product.name = req.body.name
+    product.description = req.body.description
+    product.price = req.body.price
+    product.in_offer = req.body.in_offer
+    product.offer_percentage = req.body.offer_percentage
+    product.category = req.body.category
+    product.images = req.body.images
 
-  product.save((error, productStored) => {
-    if (error) {
-      res.status(500).send({ message: error })
-    } else {
-      res.status(201).send(productStored)
-    }
+    product.save((error, productStored) => {
+      if (error) {
+        res.status(500).send({ message: error })
+      } else {
+        res.status(201).send(productStored)
+      }
+    })
   })
-})
 
 // Get (find all)
 router.get('/find/all', (req, res) => {

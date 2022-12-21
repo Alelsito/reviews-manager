@@ -16,7 +16,7 @@ const validationPostUser = (req, res, next) => {
   } = req.body
 
   const schema = yup.object().shape({
-    role: yup.string().required().oneOf(['ADMIN', 'CUSTOMER']),
+    role: yup.string().required().oneOf(['ADMIN', 'CUSTOMER', 'SELLER']),
     first_name: yup.string().required().strict(),
     last_name: yup.string().required().strict(),
     email: yup.string().email().required().strict(),
