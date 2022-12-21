@@ -5,6 +5,7 @@ const passport = require('passport')
 const { Product } = require('../model')
 const { validationPostProduct } = require('../middleware/product')
 const { validationAdminSeller } = require('../middleware/auth/role-admin-seller')
+const { validationSellerOfSelectedProduct } = require('../middleware/product')
 
 // Post
 // Authorized role accounts: ADMIN, SELLER
@@ -19,6 +20,7 @@ router.post('/',
     product.offer_percentage = req.body.offer_percentage
     product.category = req.body.category
     product.images = req.body.images
+    product.creator_user_id = res.locals.info._id
 
     product.save((error, productStored) => {
       if (error) {
@@ -63,29 +65,36 @@ router.get('/find', (req, res) => {
 })
 
 // Update
-router.patch('/update/:id', (req, res) => {
-  const key = Object.keys(req.query)[0]
-  Product.findOneAndUpdate(
-    { _id: req.params.id }, // Valor buscado
-    { [key]: req.body.value }, // Nuevo valor
-    (err, docs) => {
+router.patch('/update/:id',
+  passport.authenticate('jwt', { session: false }),
+  validationAdminSeller,
+  validationSellerOfSelectedProduct,
+  (req, res) => {
+    const key = Object.keys(req.query)[0]
+    Product.findOneAndUpdate(
+      { _id: req.params.id }, // Valor buscado
+      { [key]: req.body.value }, // Nuevo valor
+      (err, docs) => {
+        if (err) {
+          throw err
+        } else {
+          res.status(200).send({ data: docs })
+        }
+      })
+  })
+
+// Delete by id
+router.delete('/:id',
+  validationAdminSeller,
+  validationSellerOfSelectedProduct,
+  (req, res) => {
+    Product.deleteOne({ _id: req.params.id }, (err, docs) => {
       if (err) {
         throw err
       } else {
         res.status(200).send({ data: docs })
       }
     })
-})
-
-// Delete by id
-router.delete('/:id', (req, res) => {
-  Product.deleteOne({ _id: req.params.id }, (err, docs) => {
-    if (err) {
-      throw err
-    } else {
-      res.status(200).send({ data: docs })
-    }
   })
-})
 
 module.exports = router

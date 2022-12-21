@@ -12,7 +12,8 @@ const validationPostProduct = (req, res, next) => {
     in_offer,
     offer_percentage,
     category,
-    images
+    images,
+    creator_user_id
   } = req.body
 
   const schema = yup.object().shape({
@@ -22,7 +23,8 @@ const validationPostProduct = (req, res, next) => {
     in_offer: yup.boolean().required(),
     offer_percentage: yup.number().required().integer().min(0).max(100),
     category: yup.string().required().strict(),
-    images: yup.array().required()
+    images: yup.array().required(),
+    creator_user_id: yup.string().required().strict()
   })
 
   schema
@@ -33,7 +35,8 @@ const validationPostProduct = (req, res, next) => {
       in_offer,
       offer_percentage,
       category,
-      images
+      images,
+      creator_user_id
     })
     .then((valid) => {
       isValid = valid

@@ -10,7 +10,8 @@ const ProductSchema = Schema(
     in_offer: Boolean,
     offer_percentage: Number,
     category: String,
-    images: [{ image: String }]
+    images: [{ image: String }],
+    creator_user_id: String
   },
   {
     timestamps: {

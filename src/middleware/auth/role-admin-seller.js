@@ -10,9 +10,10 @@ const validationAdminSeller = (req, res, next) => {
       throw err
     } else {
       if (docs.role !== 'CUSTOMER') {
+        res.locals.info = docs
         next()
       } else {
-        res.status(200).send({
+        res.status(422).send({
           error: {
             type: 'ValidationError',
             message: 'to have acces to this route your role must be one of the following: ADMIN, SELLER'
