@@ -1,23 +1,31 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
 const { Order } = require('../model')
 const { validationPostOrder } = require('../middleware/order')
+const { validationAdminSeller } = require('../middleware/auth/role-admin-seller')
+const { validationProductExist } = require('../middleware/product')
 
 // Post
-router.post('/', validationPostOrder, (req, res) => {
-  const order = new Order()
-  order.product_id = req.body.product_id
-  order.user_id = req.body.user_id
-  order.delivered = req.body.delivered
+router.post('/',
+  passport.authenticate('jwt', { session: false }),
+  validationAdminSeller,
+  validationProductExist,
+  validationPostOrder,
+  (req, res) => {
+    const order = new Order()
+    order.product_id = req.body.product_id
+    order.user_id = res.locals.info._id
+    order.delivered = req.body.delivered
 
-  order.save((error, orderStored) => {
-    if (error) {
-      res.status(500).send({ message: error })
-    } else {
-      res.status(201).send(orderStored)
-    }
+    order.save((error, orderStored) => {
+      if (error) {
+        res.status(500).send({ message: error })
+      } else {
+        res.status(201).send(orderStored)
+      }
+    })
   })
-})
 
 // Get (find all)
 router.get('/find/all', (req, res) => {

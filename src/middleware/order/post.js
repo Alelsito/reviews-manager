@@ -7,13 +7,14 @@ const validationPostOrder = (req, res, next) => {
 
   const {
     product_id,
-    user_id,
     delivered
   } = req.body
 
+  const user_id = res.locals.info._id
+
   const schema = yup.object().shape({
     product_id: yup.string().required().strict(),
-    user_id: yup.string().required().strict(),
+    user_id: yup.string().required(),
     delivered: yup.boolean().required()
   })
 
