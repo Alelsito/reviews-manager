@@ -1,4 +1,4 @@
-const validationAdminSeller = require('./role-admin-or-seller')
+const { validationAdminSeller } = require('./role-admin-seller')
 
 module.exports = {
   validationAdminSeller
