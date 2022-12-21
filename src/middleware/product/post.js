@@ -12,9 +12,10 @@ const validationPostProduct = (req, res, next) => {
     in_offer,
     offer_percentage,
     category,
-    images,
-    creator_user_id
+    images
   } = req.body
+
+  const creator_user_id = res.locals.info._id
 
   const schema = yup.object().shape({
     name: yup.string().required().strict(),
@@ -24,7 +25,7 @@ const validationPostProduct = (req, res, next) => {
     offer_percentage: yup.number().required().integer().min(0).max(100),
     category: yup.string().required().strict(),
     images: yup.array().required(),
-    creator_user_id: yup.string().required().strict()
+    creator_user_id: yup.string().required()
   })
 
   schema

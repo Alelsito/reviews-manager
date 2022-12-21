@@ -10,7 +10,7 @@ const { validationSellerOfSelectedProduct } = require('../middleware/product')
 // Post
 router.post('/',
   passport.authenticate('jwt', { session: false }),
-  validationPostProduct, validationAdminSeller, (req, res) => {
+  validationAdminSeller, validationPostProduct, (req, res) => {
     const product = new Product()
     product.name = req.body.name
     product.description = req.body.description
