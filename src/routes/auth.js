@@ -2,10 +2,12 @@ const express = require('express')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
+const { validationPostUser } = require('../middleware/user')
 
 // Post (SignUp)
 router.post(
   '/signup',
+  validationPostUser,
   passport.authenticate('signup', { session: false }),
   async (req, res, next) => {
     res.send({
